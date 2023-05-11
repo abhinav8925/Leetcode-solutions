@@ -58,7 +58,7 @@ public:
         {
             int ind=abs(nums[i])-1;
             if(nums[ind]<0)
-                v.push_back(abs(nums[ind]));
+                v.push_back(abs(nums[i]));
             else
                 nums[ind]=-nums[ind];
                 
