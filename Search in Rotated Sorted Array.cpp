@@ -18,55 +18,94 @@
 
 // Optimal
 
- class Solution {
-public:
-    int bs(vector<int> a,int st,int en, int key)
-    {
-        int s=st;
-        int e=en;
+//  class Solution {
+// public:
+//     int bs(vector<int> a,int st,int en, int key)
+//     {
+//         int s=st;
+//         int e=en;
         
-        while(s<=e)
-        {
-            int mid=(s+e)/2;
-            if(a[mid]==key)
-            {
-                return mid;
-            }
-            else if(a[mid]>key)
-                e=mid-1;
-            else
-                s=mid+1;
-        }
-        return -1;
-    }
-    int piv(vector<int> &a,int n)
-    {
+//         while(s<=e)
+//         {
+//             int mid=(s+e)/2;
+//             if(a[mid]==key)
+//             {
+//                 return mid;
+//             }
+//             else if(a[mid]>key)
+//                 e=mid-1;
+//             else
+//                 s=mid+1;
+//         }
+//         return -1;
+//     }
+//     int piv(vector<int> &a,int n)
+//     {
         
-        int s=0;
-        int e=n-1;
-        int mid=(s+e)/2;
-        while(s<e)
-        {
+//         int s=0;
+//         int e=n-1;
+//         int mid=(s+e)/2;
+//         while(s<e)
+//         {
 
-            if(a[mid]>=a[0])
-                s=mid+1;
-            else
-                e=mid;
+//             if(a[mid]>=a[0])
+//                 s=mid+1;
+//             else
+//                 e=mid;
             
-            mid=(s+e)/2;
-        }
+//             mid=(s+e)/2;
+//         }
         
-        return s;
-    }
+//         return s;
+//     }
 
 
-    int search(vector<int>& a, int key) {
-    int n=a.size();
-    int pivot=piv(a,n);
-    if(key>=a[pivot] && key<=a[n-1])
-        return bs(a,pivot,n-1,key);
+//     int search(vector<int>& a, int key) {
+//     int n=a.size();
+//     int pivot=piv(a,n);
+//     if(key>=a[pivot] && key<=a[n-1])
+//         return bs(a,pivot,n-1,key);
     
-    return bs(a,0,pivot-1,key);
+//     return bs(a,0,pivot-1,key);
    
+//     }
+// };
+
+
+// most optimal (one pass binary search)
+
+class Solution {
+public:
+    
+    int search(vector<int>& a, int key) {
+    
+        int n=a.size();
+        int left=0;
+        int ans=-1;
+        int right=n-1;
+        while(left<=right)
+        {
+            int mid = left + (right - left) / 2;
+            if(a[mid]==key)
+                {
+                    ans=mid;
+                    break;
+                }
+            if(a[left]<=a[mid])
+            {
+                if(a[left]<=key && key<a[mid])
+                    right=mid-1;
+                else
+                    left=mid+1;
+            }
+            else 
+            {
+                if (a[mid] < key && key <= a[right]) 
+                    left = mid + 1; 
+                else 
+                    right = mid - 1;
+            }
+        }
+        return ans;
     }
 };
