@@ -15,5 +15,31 @@ public:
         }
         
         return false;
+
+	/*
+
+		int row=matrix.size();
+        int col=matrix[0].size();
+
+        int s=0,e=(row*col)-1;
+
+        while(s<=e){
+            int mid=s+(e-s)/2;
+
+            int check=matrix[mid/col][mid%col];
+
+            if(check==target){
+                return 1;
+            }
+            else if(check>target)
+                e=mid-1;
+            else
+                s=mid+1;
+        }
+
+
+        return 0;
+
+	*/
      }
 };
