@@ -27,7 +27,7 @@ public:
                     break;
             }
             if(z==o)
-                ans=max(ans,z+o);
+                ans=max(ans,2*z);
             else
                 ans=max(ans,2*min(z,o));
         }
