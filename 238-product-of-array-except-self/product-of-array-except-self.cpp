@@ -6,23 +6,22 @@ public:
         
         int n = nums.size();
 
-        vector<int> l(n,1);
-        vector<int> r(n,1);
-
-        for(int i=1;i<n;i++){
-            l[i] = l[i-1]*nums[i-1];
-        }
-
-
-        for(int i=n-2;i>=0;i--){
-            r[i] = r[i+1]*nums[i+1];
-        }
-
+        vector<int> ans(n,1);
+        
+        int cur=1;
         for(int i=0;i<n;i++){
-            nums[i] = (l[i]*r[i]);
+            ans[i]=cur;
+            cur*=nums[i];
         }
 
-        return nums;
+        cur=1;
+        for(int i=n-1;i>=0;i--){
+            ans[i]*=cur;
+            cur*=nums[i];
+        }
+
+
+        return ans;
 
     }
 };
