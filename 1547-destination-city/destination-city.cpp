@@ -1,0 +1,20 @@
+// Problem Link -> https://leetcode.com/problems/destination-city/
+
+class Solution {
+public:
+    string destCity(vector<vector<string>>& paths) {
+        map<string,int> mp;
+        int n=paths.size();
+
+        for(int i=0;i<n;i++){
+            mp[paths[i][0]]++;
+        }
+
+        for(int i=0;i<n;i++){
+            if(mp[paths[i][1]]<1)
+                return paths[i][1];
+        }
+
+        return "";
+    }
+};
