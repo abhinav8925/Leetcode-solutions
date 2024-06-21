@@ -1,24 +1,32 @@
 class Solution {
 public:
-    int maxDistance(vector<int>& position, int m) {
-        sort(position.begin(), position.end());
-        int l = 0, r = position.back() - position.front();
-        while (l < r) {
-            int mid = r - (r - l) / 2;
-            if (count(position, mid) >= m)
-                l = mid;
-            else
-                r = mid - 1;
+    bool ispos(int mid,vector<int> pos, int m){
+        int prev = pos[0];
+        int cnt=1;
+        for(int i=1;i<pos.size();i++){
+            int cur =pos[i];
+            if(cur-prev >=mid)
+                cnt++,prev=cur;
+            
+            if(cnt==m)
+                break;
         }
-        return l;
+
+        return cnt==m;
     }
-private:
-    int count(vector<int>& position, int d) {
-        int ans = 1, cur = position[0];
-        for (int i = 1; i < position.size(); ++i) {
-            if (position[i] - cur >= d) {
-                ans++;
-                cur = position[i];
+    int maxDistance(vector<int>& pos, int m) {
+        sort(begin(pos),end(pos));
+        int low=1,high=pos[pos.size()-1]-pos[0],ans=0;
+
+        while(low<=high){
+            int mid = low+(high-low)/2;
+
+            if(ispos(mid,pos,m)){
+                ans = mid;
+                low=mid+1;
+            }
+            else{
+                high=mid-1;
             }
         }
         return ans;
