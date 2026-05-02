@@ -12,8 +12,6 @@ public:
                 swap(nums[j], nums[i]);
                 j++;
             }
-            while(i<n-1 && nums[i] == 0 && nums[i] == nums[i+1])
-                i++;
         }
     }
 };
