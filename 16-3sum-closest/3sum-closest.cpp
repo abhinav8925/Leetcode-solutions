@@ -17,14 +17,8 @@ public:
                 }else if(sum > target)  r--;
                 else    l++;
                 
-                int diff = 0;
-                if((sum>=0 && target>=0) || (sum<=0 && target<=0))
-                    diff = abs(abs(sum) - abs(target));
-                else if(sum>=0 && target<0)
-                    diff = sum+abs(target);
-                else 
-                    diff = abs(sum) + target;
-                
+                int diff = abs(sum-target);
+                                
                 ans = min(ans,diff);
                 if(ans == diff)
                     r_ans = sum; 
