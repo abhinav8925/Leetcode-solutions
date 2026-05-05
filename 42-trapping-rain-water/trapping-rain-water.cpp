@@ -2,28 +2,24 @@ class Solution {
 public:
     int trap(vector<int>& height) {
         int n = height.size();
-        vector<int> left(n,0), right(n,0);
 
-        int mx =0;
-        for(int i=0;i<n;i++){
-            mx = max(height[i],mx);
-            left[i]=mx;
+        int l = 0, r = n-1;
+        int ans = 0, mxl=height[0],mxr=height[n-1];
+
+        while(l<r){
+            int water = 0;
+            if(height[l] < height[r]){
+                mxl = max(mxl,height[l]);
+                water = mxl - height[l];
+                l++;
+            }else{
+                mxr = max(mxr,height[r]);
+                water = mxr - height[r];
+                r--;
+            }
+            
+            ans+=water;
         }
-
-        
-        mx = 0;
-
-        for(int i=n-1;i>=0;i--){
-            mx = max(height[i],mx);
-            right[i] = mx;
-        }
-
-        int ans = 0;
-        for(int i=0;i<n;i++){
-            ans += (min(left[i],right[i])-height[i]);
-        }
-
-        
         return ans;
     }
 };
