@@ -1,29 +1,24 @@
 class Solution {
 public:
-    
-    bool ispal(int l, int r, string s){
-        while(l<=r){
-            if(s[l]!=s[r] ){
-                return false;
-            }
-            l++,r--;
+    bool ispal(string s, int l, int r){
+        while(l<r){
+            if(s[l]!=s[r])  return false;
+            l++;
+            r--;
         }
-        
         return true;
     }
     bool validPalindrome(string s) {
         int n = s.size();
-        
-        int l =0, r = n-1;
-        
-        while(l<=r ){
-            if(s[l] == s[r]){
-                l++;
-                r--;
+
+        int l = 0,r= n-1;
+
+        while(l<r){
+            if(s[l]!=s[r]){
+                return ispal(s,l+1,r) || ispal(s,l,r-1);
             }
-            else {
-                return ispal(l, r-1, s) || ispal(l+1,r, s);
-            }
+            l++;
+            r--;
         }
         return true;
     }
