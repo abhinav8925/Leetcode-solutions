@@ -2,16 +2,10 @@ class Solution {
 public:
     vector<int> partitionLabels(string s) {
         int n = s.size();
-        map<char,pair<int,int>> mp;
+        map<char,int> mp;
 
         for(int i=0;i<n;i++){
-            if(mp.find(s[i])==mp.end()){
-                mp[s[i]].first = i;
-                mp[s[i]].second = i;
-            }else{
-                mp[s[i]].second = i;
-            }
-            
+            mp[s[i]] = i;
         }
 
         
@@ -19,13 +13,12 @@ public:
         vector<int> ans;
 
         for(int i=0;i<n;){
-            int ss=mp[s[i]].first;
-            int e=mp[s[i]].second;
+            int e=mp[s[i]];
 
-            for(int j=ss;j<=e;j++){
-                e = max(e,mp[s[j]].second);
+            for(int j=i;j<=e;j++){
+                e = max(e,mp[s[j]]);
             }
-            ans.push_back(e-ss+1);
+            ans.push_back(e-i+1);
             i=e+1;
         }
         return ans;
