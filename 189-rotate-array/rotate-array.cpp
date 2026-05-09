@@ -3,19 +3,17 @@ public:
     void rotate(vector<int>& nums, int k) {
         
         int n = nums.size();
-        k = k%n;
-        int p=n-k;
-        vector<int> ans(n,0);
+        k = k%n; 
+        int i=0,j=n-k-1;
 
-        for(int i=0;i<k;i++){
-            ans[i] = nums[p++]; 
+        for(;i<j;){
+            swap(nums[i++],nums[j--]);
         }
-        int j=0;
-        for(int i=k;i<n;i++){
-            ans[i] = nums[j++];
+        i=n-k,j=n-1;
+        for(;i<j;){
+            swap(nums[i++],nums[j--]);
         }
-        for(int i=0;i<n;i++){
-            nums[i] = ans[i];
-        }
+
+        for(int i=0,j=n-1;i<j;i++,j--)  swap(nums[i],nums[j]);
     }
 }; 
