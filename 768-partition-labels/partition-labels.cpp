@@ -6,17 +6,15 @@ public:
 
         for(int i=0;i<n;i++){
             if(mp.find(s[i])==mp.end()){
-                mp[s[i]].first = min(i,INT_MAX);
-                mp[s[i]].second = max(i,INT_MIN);
+                mp[s[i]].first = i;
+                mp[s[i]].second = i;
             }else{
-                mp[s[i]].second = max(i,INT_MIN);
+                mp[s[i]].second = i;
             }
             
         }
 
-        // for(auto s:mp){
-        //     cout <<s.first << " -> " << s.second.first << " " << s.second.second<< endl;
-        // }
+        
         
         vector<int> ans;
 
