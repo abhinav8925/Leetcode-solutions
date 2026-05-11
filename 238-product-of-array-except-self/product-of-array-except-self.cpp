@@ -8,15 +8,14 @@ public:
             ans[i] = ans[i-1]*nums[i-1];
         }
 
-        
+        int r=1;
         for(int i=nums.size()-2;i>=0;i--){
-            ans2[i] = ans2[i+1]*nums[i+1];
+            r = r*nums[i+1];
+            ans[i] *=r;
         }
 
-        for(int i=0;i<nums.size();i++){
-            nums[i] = ans[i]*ans2[i];
-        }
+        
 
-        return nums;
+        return ans;
     }
 };
