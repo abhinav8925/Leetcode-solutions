@@ -1,34 +1,29 @@
-// Problem Link ->  https://leetcode.com/problems/maximum-number-of-vowels-in-a-substring-of-given-length/
-
 class Solution {
 public:
     int maxVowels(string s, int k) {
-        
-        
-    int ans = 0, cnt = 0;
-    int n = s.size();
-    int i = 0, j = 0;
+        int n = s.size();
 
-    while (i < n) {
-        if (s[i] == 'a' || s[i] == 'e' || s[i] == 'o' || s[i] == 'u' || s[i] == 'i')
-            cnt++;
-        if (i - j + 1 == k) {
-            ans = max(ans, cnt);
-            if (s[j] == 'a' || s[j] == 'e' || s[j] == 'o' || s[j] == 'u' || s[j] == 'i')
-                cnt--;
-            j++;
+        int cntv=0,ans=0;
+
+        for(int i=0;i<k;i++){
+            if(s[i] == 'a' || s[i] == 'e' || s[i] == 'i' || s[i] =='o' || s[i]=='u'){
+                cntv++;
+            }
         }
-        i++;
+        
+        int right=0;
+        ans=cntv;
+        for(int left = k;left<n;left++){
+            if(s[left] == 'a' || s[left] == 'e' || s[left] == 'i' || s[left] =='o' || s[left]=='u'){
+                cntv++;
+            }
+            if(s[right] == 'a' || s[right] == 'e' || s[right] == 'i' || s[right] =='o' || s[right]=='u'){
+                cntv--;
+            }
+            ans = max(ans,cntv);
+            right++;
+        }
+
+        return ans;
     }
-
-    
-    // if (ans == 0)
-    //     return -1;
-
-    return ans;
-}
-
-
-
-    
 };
