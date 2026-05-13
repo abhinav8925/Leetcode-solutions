@@ -1,46 +1,26 @@
-// Problem Link -> https://leetcode.com/problems/permutation-in-string/
-
 class Solution {
 public:
-    bool check(int m1[],int m2[]){
-        for(int i=0;i<26;i++){
-            if(m1[i]!=m2[i])
-                return false;
-        }
-        return true;
-    }
-
     bool checkInclusion(string s1, string s2) {
-        int m1[26]={0},m2[26]={0};
-        for(int i=0;i<s1.size();i++)
-            m1[s1[i]-'a']++;
-        
-        int i=0,win=s1.size();
-        if(s1.size()>s2.size())
-            return false;
-        while(i<win){
-            m2[s2[i]-'a']++;
-            i++;
-        }
-        if(check(m1,m2))
-                return true;
-        
-        while(i<s2.size()){
-            m2[s2[i]-'a']++;
-            
-            // char x=s2[i-win];
-            m2[s2[i-win]-'a']--;
+        int n1 = s1.size(), n2 = s2.size(), i=0,left=0;
 
-            if(check(m1,m2))
-                return true;
-            
-            i++;
-
+        if(n1>n2)   return false;
+        map<char,int> mp,mp2;
+        for(int j=0;j<n1;j++)
+            mp[s1[j]]++;
+        
+        for(;i<n1;i++){
+            mp2[s2[i]]++;
         }
 
+        if(mp == mp2)   return true;
+        while(i<n2){
+            mp2[s2[left]]--;
+            if(mp2[s2[left]] == 0)  mp2.erase(s2[left]);
+            mp2[s2[i++]]++;
+
+            if(mp == mp2)   return true;
+            left++;
+        }
         return false;
-
-
-
     }
 };
