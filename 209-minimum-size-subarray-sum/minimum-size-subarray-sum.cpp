@@ -9,8 +9,8 @@ public:
             sum+=nums[right];
             if(sum>=target){
                 while(sum>=target){
-                    sum-=nums[left];
                     ans = min(ans, right-left+1);
+                    sum-=nums[left];
                     left++;
                 }
             }
