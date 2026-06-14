@@ -1,25 +1,24 @@
 class Solution {
 public:
     int characterReplacement(string s, int k) {
-        if(k == s.size())
-            return k;
-        
-        int mx_f = 0;
+        int n = s.size();
+        int i=0,j=0,ans=0,mc=0;
         map<char,int> mp;
-        int ans=0,i=0,left=0;
 
-        while(i<s.size()){
-            
-                mp[s[i]]++;
-                mx_f = max(mx_f,mp[s[i]]);
-            
-            while((i-left+1)-mx_f>k){
-                mp[s[left]]--;
-                left++;
+        while(j<n){
+            mp[s[j]]++;
+            mc = max(mc, mp[s[j]]);
+            while(i<n && (j-i+1-mc) > k){
+                mp[s[i]]--;
+                if(mp[s[i]] == 0)   mp.erase(s[i]);
+
+                i++;
             }
-            ans = max(ans, i-left+1);
-            i++;
+            ans = max(ans,j-i+1);
+            
+            j++;
         }
+
         return ans;
     }
 };
