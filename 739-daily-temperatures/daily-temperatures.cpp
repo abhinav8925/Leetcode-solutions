@@ -6,17 +6,17 @@ public:
         int i=0,j=0;
         vector<int> ans(n,0);
 
-        stack<pair<int,int>> st;
+        stack<int> st;
       
         for(int i=n-1;i>=0;i--){
-            while(!st.empty() && st.top().first <= nums[i]){
+            while(!st.empty() && nums[st.top()] <= nums[i]){
                 st.pop();
             }
             if(st.empty())  ans[i]=0;
             else{
-                ans[i] = st.top().second-i;
+                ans[i] = st.top()-i;
             }
-            st.push({nums[i],i});
+            st.push(i);
         }
         
         return ans;
