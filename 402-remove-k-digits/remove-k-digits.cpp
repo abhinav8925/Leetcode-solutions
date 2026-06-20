@@ -1,44 +1,46 @@
 class Solution {
 public:
-    string removeKdigits(string num, int k) {
-        string ans="";
-        int n = num.size();
-        if(k>=n)
-            return "0";
-        if(k==0)
-            return num;
+    string removeKdigits(string s, int k) {
         
         stack<char> st;
-        st.push(num[0]);
-        for(int i=1;i<n;i++){
-            while(k>0 && !st.empty() && num[i]<st.top()){
-                --k;
-                st.pop();
-            }
-            st.push(num[i]);
+        int n = s.size();
 
-            if(st.size()==1 && num[i]=='0')
+        if(k>=n)    return "0";
+
+        for(int i=0;i<n;i++){
+               
+            while(!st.empty() && (st.top() - '0') > (s[i]-'0') && k>0){
                 st.pop();
+                k--;
+            }
+
+            st.push(s[i]);
         }
 
-        while(k && !st.empty())
-        {
-            
-            --k;
+        while(!st.empty() && k>0){
+            st.pop();
+            k--;
+        }
+
+        string ans = "";
+        while(st.size()){
+            ans+=st.top();
             st.pop();
         }
-        
-        while(!st.empty())
-        {
-            ans.push_back(st.top()); 
-            st.pop(); 
+        reverse(ans.begin(),ans.end());
+
+        int i=0;
+        string ans2="";
+        while(i<ans.size() && ans[i] =='0'){
+            i++;
         }
-        
-        reverse(ans.begin(),ans.end());  
-        
-        if(ans.length() == 0)
-            return "0";
-        
-        return ans;
+
+        // cout << i << endl;
+        if(i>=ans.size())    return "0";
+
+        for(int j=i;j<ans.size();j++)
+            ans2+=ans[j];
+
+        return ans2;
     }
 };
