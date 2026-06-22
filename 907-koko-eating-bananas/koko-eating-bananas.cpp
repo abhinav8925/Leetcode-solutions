@@ -6,11 +6,7 @@ public:
         long long cnt=0;
         for(int i=0;i<n;i++){ 
             if(cnt>h)   return false;  
-            if(nums[i]>mid){
-                cnt+=((nums[i]+mid-1)/mid);
-            }
-            else
-                cnt++;
+            cnt+=((nums[i]+mid-1)/mid);
         }
         if(cnt<=h)
             return true;
@@ -26,7 +22,7 @@ public:
         int ans = high;
 
         while(low <= high){
-            int mid = (low+high)/2;
+            int mid = low+((high-low)/2);
 
             if(f(mid, n, nums,h)){
                 ans = mid;
