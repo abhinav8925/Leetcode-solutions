@@ -1,34 +1,43 @@
 class Solution {
 public:
-    bool ispos(int mid,vector<int> pos, int m){
-        int prev = pos[0];
-        int cnt=1;
-        for(int i=1;i<pos.size();i++){
-            int cur =pos[i];
-            if(cur-prev >=mid)
-                cnt++,prev=cur;
+
+    bool f(int m, int k, vector<int> &nums){
+        int prev = nums[0];
+        int n = nums.size(),cnt=1;
+
+        for(int i=1;i<n;i++){
+
+            if(nums[i] - prev >= m){
+                prev = nums[i];
+                cnt++;
+            }else
+                continue;
             
-            if(cnt==m)
-                break;
         }
 
-        return cnt==m;
+        return cnt >= k? true:false;
     }
-    int maxDistance(vector<int>& pos, int m) {
-        sort(begin(pos),end(pos));
-        int low=1,high=pos[pos.size()-1]-pos[0],ans=0;
+    int maxDistance(vector<int>& nums, int k) {
+        
+        int n = nums.size();
 
-        while(low<=high){
-            int mid = low+(high-low)/2;
+        sort(nums.begin(),nums.end());
 
-            if(ispos(mid,pos,m)){
-                ans = mid;
-                low=mid+1;
-            }
-            else{
-                high=mid-1;
+        int l = 1,h=nums[n-1] - nums[0];
+        int ans = 0;
+
+        while(l<=h){
+            int m = l + (h-l)/2;
+
+            if(!(f(m,k,nums))){
+                
+                h = m-1;
+            }else{
+                ans=m;
+                l = m+1;
             }
         }
+
         return ans;
     }
 };
