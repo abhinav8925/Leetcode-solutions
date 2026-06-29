@@ -1,44 +1,69 @@
 class Solution {
 public:
-    vector<vector<int>> dir = {{0,1},{0,-1},{-1,0},{1,0}};
-
-
-    void bfs(queue<vector<int>> q, vector<vector<int>> &arr){
-        int n = arr.size();
-        int m = arr[0].size();
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
         
-        while(q.size()!=0){
-            vector<int> a = q.front();
-            q.pop();
-            int r = a[0];
-            int c = a[1];
-            for(int k=0; k<4; k++){
-                int nr = r+dir[k][0];
-                int nc = c+dir[k][1];
-                if(nr>=0 && nc>=0 && nr<n && nc<m && arr[nr][nc]==-1){
-                    arr[nr][nc] = arr[r][c]+1;
-                    q.push({nr,nc});
-                }
-            }
-        }
-    }
-    vector<vector<int>> updateMatrix(vector<vector<int>>& arr) {
-        int n = arr.size();
-        int m = arr[0].size();
+        int m = mat.size();
+        int n = mat[0].size();
 
-        queue<vector<int>> q;
+        vector<vector<int>> ans(m, vector<int>(n,0));
 
-        for(int i=0; i<n; i++){
-            for(int j=0; j<m; j++){
-                if(arr[i][j]==0){
+        queue<pair<int,int>> q;
+
+        bool ch = true;
+
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(mat[i][j] == 0){
+                    ch = false;
+                    ans[i][j] = 0;
                     q.push({i,j});
-                }else{
-                    arr[i][j] = -1;
                 }
             }
         }
 
-        bfs(q,arr);
-        return arr;
+        while(!q.empty()){
+            int sz = q.size();
+
+            while(sz--){
+                int row = q.front().first;
+                int col = q.front().second;
+
+                q.pop();
+                
+                if(row+1 <m){
+                    if(mat[row+1][col] == 1){
+                        ans[row+1][col] = ans[row][col]+1;
+                        q.push({row+1,col});
+                        mat[row+1][col] = 0;
+                    }
+                }
+                if(row-1>=0){
+                    if(mat[row-1][col] == 1){
+                        ans[row-1][col] = ans[row][col]+1;
+                        q.push({row-1,col});
+                        mat[row-1][col] = 0;
+                    }
+                }
+                if(col+1 <n){
+                    if(mat[row][col+1] == 1){
+                        ans[row][col+1] = ans[row][col]+1;
+                        q.push({row,col+1});
+                        mat[row][col+1] = 0;
+                    }
+                }
+                if(col-1 >=0){
+                    if(mat[row][col-1] == 1){
+                        ans[row][col-1] = ans[row][col]+1;
+                        q.push({row,col-1});
+                        mat[row][col-1] = 0;
+                    }
+                }
+
+            }
+
+        }
+
+        if(!ch) return ans;
+        return mat;
     }
 };
