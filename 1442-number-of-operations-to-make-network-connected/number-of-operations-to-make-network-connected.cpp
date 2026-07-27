@@ -53,7 +53,7 @@ public:
 
         int con = 0;
         for(int i=0;i<n;i++){
-            if(DSU1.findParent(DSU1.parent[i]) == i)
+            if(DSU1.findParent(i) == i)
                 con++;
         }
 
