@@ -1,70 +1,137 @@
-class Solution {
-    int d[5] = {1, 0, -1, 0, 1}; 
-    int n;
-
-    
-    int dfs(int row, int col, int id, vector<vector<int>>& grid) {
-        grid[row][col] = id; 
-        int cnt = 1; 
-
-        for (int i = 0; i < 4; i++) { 
-            int nr = row + d[i];
-            int nc = col + d[i + 1];
-
-            if (nr >= 0 && nc >= 0 && nr < n && nc < n && grid[nr][nc] == 1)
-                cnt += dfs(nr, nc, id, grid);
-        }
-
-        return cnt; 
-    }
-
-public:
-    int largestIsland(vector<vector<int>>& grid) {
-        n = grid.size(); 
-        vector<int> key;
-        int id = 2; 
-
+class DSU{
+    public: 
+        map<pair<int,int>, pair<int,int>> parent;
+        map<pair<int,int>,int> size;
         
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (grid[i][j] == 1)
-                    key.push_back(dfs(i, j, id++, grid));
-            }
-        }
 
-        if (key.empty()) return 1; 
-
-        int ans = 1;
-
-        
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (grid[i][j] == 0) {
-                    int cnt = 1;
-
-                    
-                    for (int k = 0; k < 4; k++) {
-                        int nr = i + d[k];
-                        int nc = j + d[k + 1];
-
-                        if (nr >= 0 && nc >= 0 && nr < n && nc < n && grid[nr][nc] != 0 && key[grid[nr][nc] - 2] > 0)
-                            cnt += key[grid[nr][nc] - 2], key[grid[nr][nc] - 2] *= -1; 
-                    }
-
-                    
-                    for (int k = 0; k < 4; k++) {
-                        int nr = i + d[k];
-                        int nc = j + d[k + 1];
-
-                        if (nr >= 0 && nc >= 0 && nr < n && nc < n && grid[nr][nc] != 0 && key[grid[nr][nc] - 2] < 0)
-                            key[grid[nr][nc] - 2] *= -1; 
-                    }
-
-                    ans = max(ans, cnt);
+        DSU(int n){
+            for(int i=0;i<n;i++){
+                for(int j=0;j<n;j++){
+                    parent[{i,j}] = {i,j};
+                    size[{i,j}] = 1;
                 }
             }
         }
 
-        return ans == 1 ? n * n : ans; 
+        pair<int,int> findParent(pair<int,int> i){
+            if(parent[i] == i)  return i;
+
+            return parent[i] = findParent(parent[i]);
+        }
+
+        void uni(pair<int,int> p, pair<int,int> q){
+
+            pair<int,int> a = findParent(p);
+            pair<int,int> b = findParent(q);
+
+            if(a==b)    return;
+
+            if(size[a] >= size[b]){
+                parent[b] = a;
+                size[a] += size[b];
+            }else{
+                parent[a] = b;
+                size[b] += size[a];
+            }
+
+        }
+};
+class Solution {
+public:
+    int largestIsland(vector<vector<int>>& grid) {
+        
+        int n = grid.size();
+        DSU DSU1(n);
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                // top
+                if(i>0){
+                    if(grid[i][j] == 1 && grid[i-1][j] ==1){
+                        DSU1.uni({i,j},{i-1,j});
+                    }
+                }
+
+                // bottom
+                if(i<n-1){
+                    if(grid[i][j] == 1 && grid[i+1][j] ==1){
+                        DSU1.uni({i,j},{i+1,j});
+                    }
+                }
+
+                //right
+                if(j<n-1){
+                    if(grid[i][j] == 1 && grid[i][j+1] ==1){
+                        DSU1.uni({i,j},{i,j+1});
+                    }
+                }
+
+                //left
+                if(j>0){
+                    if(grid[i][j] == 1 && grid[i][j-1] ==1){
+                        DSU1.uni({i,j},{i,j-1});
+                    }
+                }
+            }
+        }
+
+        bool flg=false;
+
+        int ans=1;
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                pair<int,int> p1,p2,p3,p4;
+                if(grid[i][j]==0){
+                    flg=true;
+                    set<pair<int,int>> neighbour;
+                    int temp=0;
+                    //top neighbour
+                    if(i>0){
+                        if(grid[i-1][j] == 1){
+                            p1 = DSU1.findParent({i-1,j});
+                            neighbour.insert(p1);
+                        }
+                    }
+
+                    //bottom neighbour
+                    if(i<n-1){
+                        if(grid[i+1][j] == 1){
+                            p2 = DSU1.findParent({i+1,j});
+                            neighbour.insert(p2);
+                        }
+                    }
+
+                    //right neighbour 
+                    if(j<n-1){
+                        if(grid[i][j+1] == 1){
+                             p3 = DSU1.findParent({i,j+1});
+                            neighbour.insert(p3);
+                        }
+                    }
+
+                    //left neighbour 
+                    if(j>0){
+                        if(grid[i][j-1] == 1){
+                            p4 = DSU1.findParent({i,j-1});
+                            neighbour.insert(p4);
+                        }
+                    }
+                    for(auto &s:neighbour){
+                        temp+=DSU1.size[s];
+                    }
+                    ans = max(temp+1,ans);
+                    neighbour.clear();
+                }
+
+
+            }
+        }
+
+        if(flg) return ans;
+        return n*n;
+        
+
+        
     }
 };
