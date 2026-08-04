@@ -43,6 +43,10 @@ public:
         for(int i=0;i<req.size();i++){
             int a = req[i][0];
             int b = req[i][1];
+            if (DSU1.findParent(a) == DSU1.findParent(b)) {
+                ans.push_back(true);
+                continue;
+            }
             bool ch = true;
             for(int i=0;i<res.size();i++){
                 int c = res[i][0];
