@@ -1,29 +1,23 @@
-// Problem Link -> https://leetcode.com/problems/isomorphic-strings/
-
 class Solution {
 public:
     bool isIsomorphic(string s, string t) {
         
-        map<char,char> mpp;
-        set<char> st;
-        int n=s.size();
+        map<char,char> mp,mp2;
 
-        
+        for(int i=0;i<s.size();i++){
+            char a = s[i];
+            char b = t[i];
 
-        for(int i=0;i<n;i++){
-            
-            if(mpp.count(s[i])==0 && st.count(t[i])==0){
-                    mpp[s[i]]=t[i];
-                    st.insert(t[i]);
+            if(mp.find(a) != mp.end()){
+                if(mp[a] != b)
+                    return false;
+            }else{
+                if(mp2.find(b) != mp2.end())
+                    return false;
+                mp[a] = b;
+                mp2[b] = a;
             }
-            else if(mpp.count(s[i])==0 && st.count(t[i]))
-                return false;          
-            else if(mpp[s[i]] !=t[i])
-                return false;
-
-            
         }
-
         return true;
     }
 };
