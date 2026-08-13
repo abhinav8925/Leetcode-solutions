@@ -1,21 +1,41 @@
 class Solution {
 public:
-    vector<int> findAnagrams(string s, string s2) {
-        map<char,int> m1,m2;
-         for(char c:s2) m1[c]++;
-          vector<int> v; 
-          int i=0;
-          for(int j=0;j<s.size();j++){
-             m2[s[j]]++; 
-             if(j-i+1 == s2.size()){ 
-                if(m1 == m2){ 
-                    v.push_back(i); 
-                    } 
-                m2[s[i]]--;
-                 if(m2[s[i]] == 0) m2.erase(s[i]);
-                  i++; 
+    vector<int> findAnagrams(string s, string p) {
+        
+        map<char,int> mp;
+
+        if (p.size() > s.size())
+            return {};
+
+        for(int i=0;i<p.size();i++)
+            mp[p[i]]++;
+        
+        vector<int> ans;
+
+        int left=0,right=0,n=s.size();
+        map<char,int> m2;
+        while(right<p.size()){
+            m2[s[right]]++;
+            right++;
+        }
+
+        if(mp == m2)    ans.push_back(left);
+        
+        while(right<n ){
+            m2[s[left]]--;
+            if(m2[s[left]] == 0)
+                m2.erase(s[left]);
+        
+            m2[s[right]]++;
+            right++;
+            left++;
+            
+            if(mp == m2){
+                ans.push_back(left);
             }
-         } 
-         return v;
+        }
+
+       
+        return ans;
     }
 };
