@@ -1,36 +1,32 @@
-// Problem Link -> https://leetcode.com/problems/combination-sum/
+class Solution {
+public:
+    void f(vector<int> arr,int ind, int n, int &target, int &sum, vector<vector<int>> &ans, vector<int> &temp){
 
-class Solution
-{
-    public:
-
-        void comb(int ind, int n, int target, vector<int> &ds, vector<int> &a, vector< vector< int>> &ans)
-        {
-            if (ind == n)
-            {
-                if (target == 0)
-                {
-                    ans.push_back(ds);
-                }
-                return;
-            }
-
-            if (a[ind] <= target)
-            {
-                ds.push_back(a[ind]);
-                comb(ind, n, target - a[ind], ds, a, ans);
-                ds.pop_back();
-            }
-            comb(ind + 1, n, target, ds, a, ans);
+        if(sum == target){
+                 ans.push_back(temp);
+                 return;
         }
+        
+        if(ind == n)
+            return;
 
-    vector<vector < int>> combinationSum(vector<int> &a, int target)
-    {
-        int n = a.size();
-        vector<vector < int>> ans;
-        vector<int> ds;
+        if(sum + arr[ind] <= target){
+            sum+=arr[ind];
+            temp.push_back(arr[ind]);
+            f(arr,ind,n,target,sum,ans,temp);
+            sum-=arr[ind];
+            temp.pop_back();
+        }
+        f(arr,ind+1,n,target,sum,ans,temp);
+    }
+    vector<vector<int>> combinationSum(vector<int>& arr, int target) {
+        
+        vector<vector<int>> ans;
+        vector<int> temp;
 
-        comb(0, n, target, ds, a, ans);
+        int st=0,n=arr.size(),sum=0;
+        f(arr,st,n,target,sum,ans,temp);
+
         return ans;
     }
 };
