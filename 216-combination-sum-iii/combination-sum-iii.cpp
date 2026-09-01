@@ -1,33 +1,33 @@
 class Solution {
 public:
-    void f(vector<vector<int>> &ans,vector<int> &temp,int sum,int cnt,int ind){
+    void f(int ind, vector<int> nums, vector<vector<int>> &ans, vector<int> &temp
+    ,int &sum, int n,int k){
 
-        if(cnt==0){
-            if(sum==0){
-                ans.push_back(temp);
-                return;
-            }
+        if(sum == n && temp.size() == k){
+            ans.push_back(temp);
+            return;
         }
-        if(ind>9)
+
+        if(ind == 9)
             return;
-        if(sum<0 || cnt<0)
-            return;
         
-        temp.push_back(ind);
-        f(ans,temp,sum-ind,cnt-1,ind+1);
-        temp.pop_back();
-        f(ans,temp,sum,cnt,ind+1);
-
-        
-        
-
-
+        if(nums[ind] + sum <= n){
+            temp.push_back(nums[ind]);
+            sum+=nums[ind];
+            f(ind+1,nums,ans,temp,sum,n,k);
+            sum-=nums[ind];
+            temp.pop_back();
+        }
+        f(ind+1,nums,ans,temp,sum,n,k);
     }
     vector<vector<int>> combinationSum3(int k, int n) {
-
+        
+        vector<int> nums = {1,2,3,4,5,6,7,8,9};
         vector<vector<int>> ans;
         vector<int> temp;
-        f(ans,temp,n,k,1);
+
+        int ind=0,sum=0;
+        f(ind,nums,ans,temp,sum,n,k);
 
         return ans;
     }
