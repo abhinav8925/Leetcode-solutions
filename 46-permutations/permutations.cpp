@@ -1,24 +1,31 @@
-// Problem Link -> https://leetcode.com/problems/permutations/
-
 class Solution {
 public:
+    void f(int ind, vector<int> &nums, vector<int> &temp, vector<bool> &mp, vector<vector<int>> &ans){
 
-    void func(int index,vector<int>& nums,vector<vector<int>>& ans){
-        if(index == nums.size()){
-            ans.push_back(nums);
+        if(temp.size() == nums.size()){
+            ans.push_back(temp);
             return;
         }
 
-        for(int i = index;i<nums.size();i++){
-            swap(nums[index],nums[i]);
-            func(index + 1,nums,ans);
-            swap(nums[index],nums[i]);
+        for(int i=0;i<nums.size();i++){
+            if(mp[i] == false){
+                mp[i] = true;
+                temp.push_back(nums[i]);
+                f(i,nums,temp,mp,ans);
+                mp[i]=false;
+                temp.pop_back();
+            }
         }
     }
     vector<vector<int>> permute(vector<int>& nums) {
-
+        
         vector<vector<int>> ans;
-        func(0,nums,ans);
+        vector<bool> mp(nums.size(),false);
+        int ind=0;
+        vector<int> temp;
+
+        f(ind,nums,temp,mp,ans);
+
         return ans;
     }
 };
