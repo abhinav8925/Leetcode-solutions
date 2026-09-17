@@ -1,37 +1,27 @@
-// Problem Link -> https://leetcode.com/problems/subsets-ii/description/
-
-
 class Solution {
 public:
-    void solve(vector<int> &nums, vector<int> subset, set<vector<int>> &s, int index)
-    {
-        if(index>=nums.size())
-        {
-            s.insert(subset);
-            return;
+    void f(vector<vector<int>> &ans, vector<int> &temp, int ind, vector<int> &nums){
+
+        
+        ans.push_back(temp);
+            
+
+        for(int i=ind;i<nums.size();i++){
+            if(i>ind && nums[i-1] == nums[i]){
+                continue;
+            }
+            temp.push_back(nums[i]);
+            f(ans,temp,i+1,nums);
+            temp.pop_back();
         }
-
-        
-        solve(nums, subset, s, index+1);
-
-        
-        int element = nums[index];
-        subset.push_back(element);
-        solve(nums, subset, s, index+1);
     }
-
     vector<vector<int>> subsetsWithDup(vector<int>& nums) {
-        vector<vector<int>> ans;
-        set<vector<int>> s;
-        vector<int> subset;
         
-        int index=0;
-        sort(nums.begin(), nums.end());
-        solve(nums, subset, s, index);
+        vector<vector<int>> ans;
+        vector<int> temp;
 
-        for(auto it:s)
-            ans.push_back(it);
-
+        sort(nums.begin(),nums.end());
+        f(ans,temp,0,nums);
         return ans;
     }
 };
