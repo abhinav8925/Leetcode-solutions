@@ -4,6 +4,8 @@ public:
         
         if(p->val < root->val && q->val < root->val)
             return f(root->left,p,q);
+
+        
         if(p->val >root->val && q->val > root->val)
             return f(root->right,p,q);
         
