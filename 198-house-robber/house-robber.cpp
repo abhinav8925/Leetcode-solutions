@@ -19,15 +19,29 @@ public:
         vector<int> dp(n,-1);
         // return f(0,nums,dp);
         dp[0] = nums[0];
-        for(int i=1;i<n;i++){
-            int take = INT_MIN;
-            take = nums[i];
-            if(i > 1)
-                take += dp[i-2];
-            int not_take = dp[i-1];
-            dp[i] = max(take,not_take);
-        }
+        // for(int i=1;i<n;i++){
+        //     int take = INT_MIN;
+        //     take = nums[i];
+        //     if(i > 1)
+        //         take += dp[i-2];
+        //     int not_take = dp[i-1];
+        //     dp[i] = max(take,not_take);
+        // }
 
-        return dp[n-1];
+
+        // return dp[n-1];
+        int prev = nums[0],prev2=0;
+        for(int i=1;i<n;i++){
+            int take = nums[i];
+            if(i>1)
+                take+=prev2;
+            
+            int not_take = prev;
+            int curi = max(take,not_take);
+            prev2 = prev;
+            prev = curi;
+
+        }
+        return prev;
     }
 };
