@@ -27,9 +27,27 @@ public:
             return false;
         
         int tar = sum/2;
-        vector<vector<int>> dp(n,vector<int> (tar+1,-1));
-        return f(n-1,nums,tar,dp);
+        // vector<vector<int>> dp(n,vector<int> (tar+1,-1));
+        // return f(n-1,nums,tar,dp);
+        vector<vector<bool>> dp(n,vector<bool> (tar+1,false));
+        for(int i=0;i<n;i++)
+            dp[i][0] = true;
+        
+        if(nums[0] <= tar)
+            dp[0][nums[0]] = true;
 
+        for(int i=1;i<n;i++){
+            for(int temp=1;temp<=tar;temp++){
+                bool not_take = dp[i-1][temp];
+                bool take = false;
+                if(nums[i] <= temp)
+                    take = dp[i-1][temp-nums[i]];
+                
+                dp[i][temp] = take | not_take;
+            }
+        }
+
+        return dp[n-1][tar];
 
     }
 };
