@@ -27,8 +27,25 @@ public:
         if (abs(target) > total) return 0;
 
         int n = nums.size();
-        vector<vector<int>> dp(n, vector<int>(2 * total + 1, -1));
+        // vector<vector<int>> dp(n, vector<int>(2 * total + 1, -1));
 
-        return f(n - 1, nums, target, dp, total);
+        // return f(n - 1, nums, target, dp, total);
+                int offset = total;
+        vector<vector<int>> dp(n, vector<int>(2 * total + 1, 0));
+
+        dp[0][offset + nums[0]]++;
+        dp[0][offset - nums[0]]++;
+
+        for (int i = 1; i < n; i++) {
+            for (int s = -total; s <= total; s++) {
+                int ways = dp[i - 1][s + offset];
+                if (ways == 0) continue;
+
+                dp[i][s + nums[i] + offset] += ways;
+                dp[i][s - nums[i] + offset] += ways;
+            }
+        }
+
+        return dp[n - 1][target + offset];
     }
 };
