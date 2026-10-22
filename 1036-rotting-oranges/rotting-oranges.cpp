@@ -1,76 +1,65 @@
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
 
-        queue<pair<int, int>> q;
-        
-        int m = grid.size();
-        int n = grid[0].size();
-
-        
-
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                if(grid[i][j] == 2) 
+        queue<pair<int,int>> q;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j] == 2){
                     q.push({i,j});
+                }
             }
         }
 
-        int ans = 0;
+        int cnt = 0;
         while(!q.empty()){
-            int sz = q.size();
-            bool ch = true;
-
-            while(sz-- ){
-
-                int row = q.front().first;
-                int col = q.front().second;
-
+            bool ch = false;
+            int sz = q.size(); 
+            while(sz--){
+                int r = q.front().first;
+                int c = q.front().second;
                 q.pop();
-                if(row+1 < m){
-                    if(grid[row+1][col] == 1) {
-                            grid[row+1][col]=2;
-                            q.push({row+1,col});
-                            ch=false;
-                    }
-                }
-                    if(row-1>=0){
-                        if(grid[row-1][col] == 1) {
-                                grid[row-1][col]=2;
-                                q.push({row-1,col});
-                                ch=false;
+                if(r+1 <n){
+                    if(grid[r+1][c] == 1){
+                        grid[r+1][c] = 2;
+                        q.push({r+1,c});
+                        ch=true;
                         }
                     }
-                
-                if(col+1<n){
-                    if(grid[row][col+1] == 1){
-                        grid[row][col+1]=2;
-                            q.push({row,col+1});
-                            ch=false;
+                if(c+1 <m){
+                    if(grid[r][c+1] == 1){
+                        grid[r][c+1]=2;
+                        q.push({r,c+1});
+                        ch=true;
+                        }
+                    }
+                if(r-1 >=0){
+                    if(grid[r-1][c] == 1){
+                        grid[r-1][c]=2;
+                        q.push({r-1,c});
+                        ch=true;
+                        }
+                    }
+                if(c-1 >=0){
+                    if(grid[r][c-1] == 1){
+                        grid[r][c-1]=2;
+                        q.push({r,c-1});
+                        ch=true;
                     }
                 }
-                if(col-1>=0){
-                     if(grid[row][col-1] == 1){
-                            grid[row][col-1]=2;
-                            q.push({row,col-1});
-                            ch=false;
-                    }
-                }
-
+            }
+            if(ch)
+                cnt++;
         }
-            if(!ch) ans++;
-    }
-        
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                if(grid[i][j] == 1) return -1;
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j] == 1)
+                    return -1;
             }
         }
-        return ans;
-        
+        return cnt;
     }
 };
-
-
-
-
