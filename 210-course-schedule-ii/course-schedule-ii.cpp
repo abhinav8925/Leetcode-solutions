@@ -1,47 +1,40 @@
 class Solution {
-public: 
-    bool dfs(vector<bool> &vis, int node, vector<vector<int>> &adj, vector<bool> &curr,vector<int> &ans){
-        vis[node] = true;
-        curr[node] = true;
+public:
+    vector<int> findOrder(int num, vector<vector<int>>& pre) {
 
-        for(int i=0;i<adj[node].size();i++){
-            int next = adj[node][i];
-
-            if(curr[next] == true)
-                return false;
-            
-            if(!vis[next])  
-                if(!dfs(vis, next,adj,curr,ans)) 
-                    return false;
-        }
-
-        curr[node] = false;
-        ans.push_back(node);
-        return true;
-    }
-    vector<int> findOrder(int numCourses, vector<vector<int>>& pre) {
-        
-        vector<vector<int>> adj(numCourses,vector<int>());
-
+        vector<vector<int>> adj(num);
+        vector<int> ind(num,0);
         for(int i=0;i<pre.size();i++){
             int a = pre[i][0];
-            int b = pre[i][1];        
-
+            int b = pre[i][1];
             adj[b].push_back(a);
+            ind[a]++;
+        }
+        
+        queue<int> q;
+
+        for(int i=0;i<num;i++){
+            if(ind[i] == 0)
+                q.push(i);
         }
 
-        vector<bool> vis(numCourses,false),curr(numCourses,false);
         vector<int> ans;
-
-        for(int i=0;i<numCourses;i++){
-            if(!vis[i]){
-                if(!dfs(vis,i,adj,curr,ans))
-                    return {};
+        while(!q.empty()){
+            int node = q.front();
+            q.pop();
+            ans.push_back(node);
+            for(int i=0;i<adj[node].size();i++){
+                int nbr = adj[node][i];
+                ind[nbr]--;
+                if(ind[nbr] == 0)
+                    q.push(nbr);
             }
         }
 
-        reverse(ans.begin(),ans.end());
-        return ans;
+        if(ans.size() == num)
+            return ans ;
+        return  {};
 
+        
     }
 };
