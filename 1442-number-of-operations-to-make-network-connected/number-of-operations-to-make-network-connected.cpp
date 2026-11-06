@@ -1,63 +1,66 @@
-#include<bits/stdc++.h>
 class DSU{
-    public: 
+public: 
+    vector<int> par, size;
 
-        vector<int> parent;
-        vector<int> size;
+    DSU(int n){
+        par.resize(n);
+        size.resize(n,1);
 
-        DSU(int n){
-            parent.resize(n);
-            size.resize(n,1);
-
-            for(int i=0;i<n;i++)
-                parent[i] = i;
+        for(int i=0;i<n;i++){
+            par[i] = i;
         }
+    }
 
-        int findParent(int i){
-            if(parent[i] == i)  return i;
+    int findpar(int u){
+        if(par[u] == u)
+            return u;
+        return par[u] = findpar(par[u]);
 
-            return parent[i] = findParent(parent[i]);
+    }
+
+    void uni(int u, int v){
+        int a = findpar(u);
+        int b = findpar(v);
+
+        if(a == b)
+            return;
+        
+        if(size[a] > size[b]){
+            par[b] = a;
+            size[a] += size[b];
+        }else{
+            par[a] = b;
+            size[b] += size[a];
         }
-
-        void unionBysize(int p,int q, int &red){
-            int a = findParent(p);
-            int b = findParent(q);
-
-            if(a==b){
-                red++;
-                return;
-            }
-
-
-            if(size[a]>size[b]){
-                parent[b] = a;
-                size[a] += size[b];
-            }else{
-                parent[a] = b;
-                size[b] += size[a];
-            }
-        }
+    }
 };
-
 class Solution {
 public:
-    int makeConnected(int n, vector<vector<int>>& pre) {
+    int makeConnected(int n, vector<vector<int>>& grid) {
         
-        DSU DSU1(n);
-        int red = 0;
+        int sz = grid.size();
+        if(sz < n-1)
+            return -1;
+        
+        int cnt = 0;
 
-        int m = pre.size();
-        for(int i=0;i<m;i++){
-            DSU1.unionBysize(pre[i][0],pre[i][1],red);
+        DSU ds(n);
+
+        for(int i=0;i<grid.size();i++){
+            int a = grid[i][0];
+            int b = grid[i][1];
+
+            if(ds.findpar(a) != ds.findpar(b)){
+            
+                ds.uni(a,b);
+            }
         }
 
-        int con = 0;
         for(int i=0;i<n;i++){
-            if(DSU1.findParent(i) == i)
-                con++;
+            if(ds.findpar(i) == i)
+                cnt++;
         }
-
-        if(red >= con-1)    return con-1;
-        return -1;
+        
+        return cnt-1;
     }
 };
