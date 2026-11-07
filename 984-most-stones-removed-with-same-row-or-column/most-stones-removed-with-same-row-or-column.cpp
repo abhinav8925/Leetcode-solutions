@@ -1,71 +1,72 @@
-class DSU{
-    public: 
-        map<int,int> parent;
-        vector<int> size;
 
-        DSU(int n){
-            size.resize(n,1);
-            
-            for(int i=0;i<n;i++){
-                parent[i]=i;
-            
-            }
+class DSU {
+    vector<int> size, par;
+
+public:
+    DSU(int n) {
+        par.resize(n+1);
+        size.resize(n+1, 1);
+
+        for(int i=0; i<=n; i++) {
+            par[i] = i;
+            size[i] = 1;
         }
+    }
 
-        int findParent(int n){
-            if(parent[n] == n)  return n;
-            return parent[n] = findParent(parent[n]);
+    int findpar(int n) {
+        if(par[n] == n)
+            return n;
+
+        return par[n] = findpar(par[n]);
+    }
+
+    void uni(int u, int v) {
+        int a = findpar(u);
+        int b = findpar(v);
+
+        if(a == b) return;
+
+        if(size[a] >= size[b]) {
+            par[b] = a;
+            size[a] += size[b];
+        } else {
+            par[a] = b;
+            size[b] += size[a];
         }
-
-        void un(int p, int q){
-            int a = findParent(p);
-            int b = findParent(q);
-
-            if(a==b)    return;
-            if(size[a] >= size[b]){
-                parent[b] = a;
-                size[a] += size[b]; 
-            }else{
-                parent[a] = b;
-                size[b] += size[a];
-            }
-        }
+    }
 };
-
 
 class Solution {
 public:
-    int removeStones(vector<vector<int>>& pre) {
+    int removeStones(vector<vector<int>>& stones) {
+        int mxr = 0, mxc = 0;
 
-        int m = pre.size();
-        int mr=INT_MIN,mc=INT_MIN;
-        for(int i=0;i<m;i++){
-            mr = max(mr,pre[i][0]);
-            mc = max(mc,pre[i][1]);
+        for(auto it : stones) {
+            mxr = max(mxr, it[0]);
+            mxc = max(mxc, it[1]);
         }
 
-        DSU DSU1(mr+mc+2);
+        DSU ds(mxr + mxc + 1);
 
-        for(int i=0;i<m;i++){
-            int a = pre[i][0];
-            int b = pre[i][1];
-            DSU1.un(a,mr+b+1);
+        unordered_map<int,int> unq;
+
+        for(auto it : stones) {
+            int nr = it[0];
+            int nc = it[1] + mxr + 1;
+
+            ds.uni(nr, nc);
+
+            unq[nr] = 1;
+            unq[nc] = 1;
         }
 
-        
-        set<int> s;
-        for(int i=0;i<m;i++){
-            int a = pre[i][0];
-            int b = pre[i][1];
-            if(DSU1.findParent(a)==a)
-            s.insert(a);
-            if( DSU1.findParent(b+mr+1) == b+mr+1)   
-            s.insert(b);
-         
+        int cnt = 0;
+
+        for(auto it : unq) {
+            if(ds.findpar(it.first) == it.first)
+                cnt++;
         }
 
-        
-        return m-s.size();
-        
+        return stones.size() - cnt;
     }
 };
